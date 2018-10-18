@@ -19,6 +19,5 @@ node_modules/
 # Output of 'npm pack'
 *.tgz
 
-# dotenv environment variables file
-.env
-
+# config variables
+keys.js
