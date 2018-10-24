@@ -3,11 +3,10 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const keys = require('../../config/keys');
 
 const User = require('../../models/User');
-
-router.get('/test', (req, res) => res.json({ message: 'Users works' }));
 
 // Register new user
 router.post('/register', (req, res) => {
@@ -15,17 +14,19 @@ router.post('/register', (req, res) => {
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
     } else {
-      const avatar = gravatar.url(req.body.email, {
+      const { name, email, password } = req.body;
+
+      const avatar = gravatar.url(email, {
         s: '200',
         r: 'pg',
         d: 'mm'
       });
 
       const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
+        name,
+        email,
         avatar,
-        password: req.body.password
+        password
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -55,7 +56,7 @@ router.post('/login', (req, res) => {
       if (isMatch) {
         // JWT payload
         const { _id, name, avatar } = user;
-        const payload = { _id, name, avatar };
+        const payload = { id: _id, name, avatar };
 
         jwt.sign(
           payload,
@@ -74,5 +75,19 @@ router.post('/login', (req, res) => {
     });
   });
 });
+
+router.get(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { id, name, email } = req.user;
+
+    res.json({
+      id,
+      name,
+      email
+    });
+  }
+);
 
 module.exports = router;
