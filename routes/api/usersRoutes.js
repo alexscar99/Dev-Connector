@@ -6,13 +6,21 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const keys = require('../../config/keys');
 
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
 const User = require('../../models/User');
 
 // Register new user
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(400).json({ email: 'Email already exists' });
+      errors.email = 'Email already exists';
+      return res.status(400).json(errors);
     } else {
       const { name, email, password } = req.body;
 
@@ -45,18 +53,25 @@ router.post('/register', (req, res) => {
 
 // Login user
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   const { email, password } = req.body;
 
   User.findOne({ email }).then(user => {
     // check user
-    if (!user) return res.status(404).json({ email: 'User not found' });
+    if (!user) {
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
+    }
 
     // check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // JWT payload
-        const { _id, name, avatar } = user;
-        const payload = { id: _id, name, avatar };
+        const { id, name, avatar } = user;
+        const payload = { id, name, avatar };
 
         jwt.sign(
           payload,
@@ -70,7 +85,8 @@ router.post('/login', (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ password: 'Password incorrect' });
+        errors.password = 'Password incorrect';
+        return res.status(400).json(errors);
       }
     });
   });
