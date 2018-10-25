@@ -62,7 +62,7 @@ router.get('/handle/:handle', (req, res) => {
     .catch(err => console.log(err));
 });
 
-// get profile by user
+// get profile by user id
 router.get('/user/:user_id', (req, res) => {
   const errors = {};
 
