@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { registerUser } from '../../actions/';
+import { registerUser } from '../../actions/authActions';
 import classnames from 'classnames';
 
 class Register extends Component {
@@ -12,6 +12,12 @@ class Register extends Component {
     password2: '',
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
