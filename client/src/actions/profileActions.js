@@ -30,6 +30,32 @@ export const createProfile = (profileData, history) => async dispatch => {
   }
 };
 
+// add experience
+export const addExperience = (expData, history) => async dispatch => {
+  try {
+    await axios.post('/api/profile/experience', expData);
+    history.push('/dashboard');
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    });
+  }
+};
+
+// add education
+export const addEducation = (eduData, history) => async dispatch => {
+  try {
+    await axios.post('/api/profile/education', eduData);
+    history.push('/dashboard');
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    });
+  }
+};
+
 // delete account and profile
 export const deleteAccount = () => async dispatch => {
   if (window.confirm('Are you sure? This can NOT be undone')) {

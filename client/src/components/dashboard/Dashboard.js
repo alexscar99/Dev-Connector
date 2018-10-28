@@ -34,7 +34,7 @@ class Dashboard extends Component {
             </p>
             <ProfileChanges />
             {/* experience and education will go here */}
-            <div style={{ marginBottom: '60px' }}>
+            <div style={{ marginBottom: '40px' }}>
               <button
                 onClick={this.handleDeleteClick}
                 className="btn btn-danger"
