@@ -10,14 +10,11 @@ class Education extends Component {
   }
 
   render() {
-    console.log(this.props.education);
     const education = this.props.education.map(edu => (
       <tr key={edu._id}>
         <td>{edu.school}</td>
         <td>{edu.degree}</td>
         <td>
-          {console.log('from', edu.from)}
-          {console.log('to', edu.to)}
           <Moment add={{ days: 1 }} format="MM/DD/YYYY">
             {edu.from}
           </Moment>{' '}
