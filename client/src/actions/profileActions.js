@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
@@ -17,6 +18,18 @@ export const getCurrentProfile = () => async dispatch => {
     dispatch({ type: GET_PROFILE, payload: res.data });
   } catch (err) {
     dispatch({ type: GET_PROFILE, payload: {} });
+  }
+};
+
+// get all profiles
+export const getProfiles = () => async dispatch => {
+  dispatch(setProfileLoading());
+
+  try {
+    const res = await axios.get('/api/profile/all');
+    dispatch({ type: GET_PROFILES, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_PROFILES, payload: null });
   }
 };
 
