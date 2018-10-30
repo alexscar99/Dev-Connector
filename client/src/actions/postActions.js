@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   ADD_POST,
   GET_POSTS,
+  GET_POST,
   GET_ERRORS,
   POST_LOADING,
   DELETE_POST
@@ -28,6 +29,18 @@ export const getPosts = () => async dispatch => {
     dispatch({ type: GET_POSTS, payload: res.data });
   } catch (err) {
     dispatch({ type: GET_POSTS, payload: null });
+  }
+};
+
+// get a singular post
+export const getPost = id => async dispatch => {
+  dispatch(setPostLoading());
+  try {
+    const res = await axios.get(`/api/posts/${id}`);
+
+    dispatch({ type: GET_POST, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_POST, payload: null });
   }
 };
 
@@ -70,6 +83,17 @@ export const removeLike = id => async dispatch => {
       type: GET_ERRORS,
       payload: err.response.data
     });
+  }
+};
+
+// add a comment to a post
+export const addComment = (postId, commentData) => async dispatch => {
+  try {
+    const res = await axios.post(`/api/posts/comment/${postId}`, commentData);
+
+    dispatch({ type: GET_POST, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
   }
 };
 
