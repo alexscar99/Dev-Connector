@@ -53,11 +53,11 @@ router.get('/handle/:handle', (req, res) => {
     .populate('user', ['name', 'avatar'])
     .then(profile => {
       if (!profile) {
-        errors.noprofile = 'There is no profile for this error';
+        errors.noprofile = 'There is no profile for this handle';
         res.status(404).json(errors);
+      } else {
+        res.json(profile);
       }
-
-      res.json(profile);
     })
     .catch(err => console.log(err));
 });
