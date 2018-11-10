@@ -93,7 +93,7 @@ class ProfileHeader extends Component {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <i className="fab fa-twitter fa-2x" />
+                    <i className="fab fa-instagram fa-2x" />
                   </a>
                 )}
               </p>
